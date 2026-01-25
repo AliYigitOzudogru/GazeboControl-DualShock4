@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="rover" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <!-- Include Robotic Arm -->
+  <xacro:include filename="$(find rover_sim)/urdf/arm.urdf.xacro" />
+
   <!-- Include original URDF structure -->
   <link name="base_link">
     <inertial>
@@ -323,6 +326,57 @@
       <command_interface name="velocity">
         <param name="min">-10</param>
         <param name="max">10</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- ========== ARM JOINTS ========== -->
+    <!-- Arm Joint 1 - Base rotation -->
+    <joint name="arm_joint1">
+      <command_interface name="position">
+        <param name="min">-3.14159</param>
+        <param name="max">3.14159</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Arm Joint 2 - Shoulder -->
+    <joint name="arm_joint2">
+      <command_interface name="position">
+        <param name="min">-1.57</param>
+        <param name="max">1.57</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Arm Joint 3 - Elbow -->
+    <joint name="arm_joint3">
+      <command_interface name="position">
+        <param name="min">-2.0</param>
+        <param name="max">2.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Arm Joint 4 - Wrist pitch -->
+    <joint name="arm_joint4">
+      <command_interface name="position">
+        <param name="min">-2.0</param>
+        <param name="max">2.0</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Arm Joint 5 - Wrist roll -->
+    <joint name="arm_joint5">
+      <command_interface name="position">
+        <param name="min">-3.14159</param>
+        <param name="max">3.14159</param>
       </command_interface>
       <state_interface name="position"/>
       <state_interface name="velocity"/>

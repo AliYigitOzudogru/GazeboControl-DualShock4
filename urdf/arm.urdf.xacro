@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===================== ROBOTIC ARM ===================== -->
+  <!-- 5 DOF Robotic Arm - Using ORIGINAL SolidWorks joint values -->
+  <!-- Mesh'ler SolidWorks koordinat sisteminde olduğu için orijinal değerler kullanılıyor -->
+
+  <!-- Arm Base Link (tabla - yatay platform) -->
+  <link name="arm_base_link">
+    <inertial>
+      <origin xyz="-0.00318904269931468 -0.00419682667481835 0.0118910353713912" rpy="0 0 0" />
+      <mass value="0.522228178630337" />
+      <inertia ixx="0.00147097778368179" ixy="2.33880725980723E-20" ixz="1.88368951544087E-19"
+               iyy="0.00293793166318926" iyz="-9.4249686517227E-07" izz="0.00148740472626396" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_base_link.STL" />
+      </geometry>
+      <material name="arm_gray">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint: Rover base_link -> Arm base_link (FIXED MOUNT) -->
+  <joint name="arm_mount_joint" type="fixed">
+    <origin xyz="0.0 0 0.05" rpy="-1.5708 0 -1.5708" />
+    <parent link="base_link" />
+    <child link="arm_base_link" />
+  </joint>
+
+  <!-- LINK1 - Dönen taban parçası -->
+  <link name="arm_link1">
+    <inertial>
+      <origin xyz="-1.32336618648143E-06 1.78500792303096E-06 0.0582001944125446" rpy="0 0 0" />
+      <mass value="0.397992046354864" />
+      <inertia ixx="0.000407319084802603" ixy="-0.00013029971921086" ixz="-5.4216471499182E-20"
+               iyy="0.000486471039847018" iyz="-2.62137653198575E-19" izz="0.000480444949972355" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK1.STL" />
+      </geometry>
+      <material name="arm_color1">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK1.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- JOINT1: arm_base_link -> arm_link1 (ORİJİNAL DEĞERLER) -->
+  <joint name="arm_joint1" type="revolute">
+    <origin xyz="-0.003189 0 0.02721" rpy="-1.5708 0.94141 -3.1416" />
+    <parent link="arm_base_link" />
+    <child link="arm_link1" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14159" upper="3.14159" effort="50" velocity="1.0" />
+    <dynamics damping="0.5" friction="0.1"/>
+  </joint>
+
+  <!-- LINK2 - İlk kol segmenti -->
+  <link name="arm_link2">
+    <inertial>
+      <origin xyz="-0.139176192703336 -0.101132109234881 0.0253920180116371" rpy="0 0 0" />
+      <mass value="0.53458687121787" />
+      <inertia ixx="0.000424944105668904" ixy="-0.000230932296866385" ixz="6.6051919784843E-05"
+               iyy="0.000706072533200556" iyz="3.65876077879969E-05" izz="0.000799539428399089" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK2.STL" />
+      </geometry>
+      <material name="arm_color2">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK2.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- JOINT2: arm_link1 -> arm_link2 (ORİJİNAL DEĞERLER) -->
+  <joint name="arm_joint2" type="revolute">
+    <origin xyz="0 0 0.105" rpy="-1.306 0.91578 2.4206" />
+    <parent link="arm_link1" />
+    <child link="arm_link2" />
+    <axis xyz="-0.59556 0.80331 0" />
+    <limit lower="-1.57" upper="1.57" effort="50" velocity="1.0" />
+    <dynamics damping="0.5" friction="0.1"/>
+  </joint>
+
+  <!-- LINK3 - İkinci kol segmenti -->
+  <link name="arm_link3">
+    <inertial>
+      <origin xyz="-0.000578459337930715 0.00260152122264995 0.201032709063688" rpy="0 0 0" />
+      <mass value="0.424862310269116" />
+      <inertia ixx="0.000656002090496159" ixy="3.31124559323988E-05" ixz="5.99478205728333E-05"
+               iyy="0.000634716856122465" iyz="-8.47785908650576E-05" izz="0.000247610872673386" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK3.STL" />
+      </geometry>
+      <material name="arm_color3">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK3.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- JOINT3: arm_link2 -> arm_link3 (ORİJİNAL DEĞERLER) -->
+  <joint name="arm_joint3" type="revolute">
+    <origin xyz="-0.39338 -0.29164 0.072284" rpy="-0.33187 0.41406 -0.070323" />
+    <parent link="arm_link2" />
+    <child link="arm_link3" />
+    <axis xyz="-0.59556 0.80331 0" />
+    <limit lower="-2.0" upper="2.0" effort="50" velocity="1.0" />
+    <dynamics damping="0.5" friction="0.1"/>
+  </joint>
+
+  <!-- LINK4 - Bilek parçası -->
+  <link name="arm_link4">
+    <inertial>
+      <origin xyz="-0.0167780041822596 -0.00900696881391538 -0.0112923485786274" rpy="0 0 0" />
+      <mass value="0.160410459502568" />
+      <inertia ixx="8.30141121437869E-05" ixy="-1.02774525256404E-05" ixz="-1.94447499608158E-05"
+               iyy="9.02629755497989E-05" iyz="-1.40569503885943E-05" izz="0.000101405048174309" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK4.STL" />
+      </geometry>
+      <material name="arm_color4">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK4.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- JOINT4: arm_link3 -> arm_link4 (ORİJİNAL DEĞERLER) -->
+  <joint name="arm_joint4" type="revolute">
+    <origin xyz="0.0019071 0.0014138 0.43999" rpy="2.4416 -0.71537 -1.5945" />
+    <parent link="arm_link3" />
+    <child link="arm_link4" />
+    <axis xyz="-0.59556 0.80331 0" />
+    <limit lower="-2.0" upper="2.0" effort="30" velocity="1.0" />
+    <dynamics damping="0.3" friction="0.1"/>
+  </joint>
+
+  <!-- LINK5 - End effector / Gripper montaj noktası -->
+  <link name="arm_link5">
+    <inertial>
+      <origin xyz="0.066108002188749 0.0514975756705127 0.0502673479976692" rpy="0 0 0" />
+      <mass value="0.442992744139313" />
+      <inertia ixx="0.000257873316189734" ixy="3.05005543922692E-05" ixz="3.91264491218721E-05"
+               iyy="0.000264253924619231" iyz="4.27501049498787E-06" izz="0.000252968887644879" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK5.STL" />
+      </geometry>
+      <material name="arm_color5">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find rover_sim)/meshes/arm_LINK5.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- JOINT5: arm_link4 -> arm_link5 (ORİJİNAL DEĞERLER) -->
+  <joint name="arm_joint5" type="revolute">
+    <origin xyz="0 0 0" rpy="-0.020905 -0.015752 -0.015523" />
+    <parent link="arm_link4" />
+    <child link="arm_link5" />
+    <axis xyz="-0.68904 -0.51084 -0.51406" />
+    <limit lower="-3.14159" upper="3.14159" effort="20" velocity="1.5" />
+    <dynamics damping="0.2" friction="0.1"/>
+  </joint>
+
+  <!-- ===================== GAZEBO COLORS ===================== -->
+  <gazebo reference="arm_base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="arm_link1">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="arm_link2">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="arm_link3">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="arm_link4">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="arm_link5">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+</robot>

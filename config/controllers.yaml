@@ -9,6 +9,9 @@ controller_manager:
     diff_drive_controller:
       type: diff_drive_controller/DiffDriveController
 
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
 # Joint State Broadcaster Configuration
 joint_state_broadcaster:
   ros__parameters:
@@ -17,9 +20,41 @@ joint_state_broadcaster:
       - right_rear_wheel_joint
       - left_front_wheel_joint
       - left_rear_wheel_joint
+      - arm_joint1
+      - arm_joint2
+      - arm_joint3
+      - arm_joint4
+      - arm_joint5
     interfaces:
       - position
       - velocity
+
+# Arm Controller Configuration (Joint Trajectory Controller)
+arm_controller:
+  ros__parameters:
+    joints:
+      - arm_joint1
+      - arm_joint2
+      - arm_joint3
+      - arm_joint4
+      - arm_joint5
+    
+    command_interfaces:
+      - position
+    
+    state_interfaces:
+      - position
+      - velocity
+    
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    
+    allow_partial_joints_goal: false
+    open_loop_control: false
+    
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0
 
 # Differential Drive Controller Configuration
 diff_drive_controller:

@@ -135,6 +135,14 @@ def generate_launch_description():
         output='screen'
     )
     
+    # Arm Controller Spawner
+    arm_controller_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['arm_controller', '--controller-manager', '/controller_manager'],
+        output='screen'
+    )
+    
     # Delay controller spawners until robot is spawned
     delay_joint_state_broadcaster = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -147,6 +155,13 @@ def generate_launch_description():
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
             on_exit=[diff_drive_controller_spawner],
+        )
+    )
+    
+    delay_arm_controller = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=diff_drive_controller_spawner,
+            on_exit=[arm_controller_spawner],
         )
     )
     
@@ -222,6 +237,7 @@ def generate_launch_description():
     ld.add_action(spawn_robot)
     ld.add_action(delay_joint_state_broadcaster)
     ld.add_action(delay_diff_drive_controller)
+    ld.add_action(delay_arm_controller)
     ld.add_action(bridge_clock)
     ld.add_action(bridge_odom)
     ld.add_action(joy_node)
