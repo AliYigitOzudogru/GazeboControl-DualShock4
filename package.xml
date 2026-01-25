@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>rover_sim</name>
+  <version>1.0.0</version>
+  <description>
+    ROS 2 Rover Simulation Package with Gazebo and PS4 Controller Support.
+    Contains URDF/xacro models, launch files, controllers, and custom nodes
+    for rover simulation with racing-style PS4 controller interface.
+  </description>
+  <maintainer email="TODO@email.com">TODO</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Build tool dependencies -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <!-- Core ROS 2 dependencies -->
+  <depend>rclpy</depend>
+  <depend>rclcpp</depend>
+  
+  <!-- Robot description and visualization -->
+  <depend>robot_state_publisher</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>xacro</depend>
+  <depend>urdf</depend>
+  
+  <!-- Gazebo integration -->
+  <depend>ros_gz_sim</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>gz_ros2_control</depend>
+  
+  <!-- ros2_control stack -->
+  <depend>controller_manager</depend>
+  <depend>diff_drive_controller</depend>
+  <depend>joint_state_broadcaster</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  
+  <!-- Joystick and control messages -->
+  <depend>joy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  
+  <!-- Launch and utilities -->
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <depend>ament_index_python</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

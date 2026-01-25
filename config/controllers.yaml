@@ -1,0 +1,72 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz
+
+    # List of controllers to load on startup
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+# Joint State Broadcaster Configuration
+joint_state_broadcaster:
+  ros__parameters:
+    joints:
+      - right_front_wheel_joint
+      - right_rear_wheel_joint
+      - left_front_wheel_joint
+      - left_rear_wheel_joint
+    interfaces:
+      - position
+      - velocity
+
+# Differential Drive Controller Configuration
+diff_drive_controller:
+  ros__parameters:
+    # Wheel joints
+    left_wheel_names: ["left_front_wheel_joint", "left_rear_wheel_joint"]
+    right_wheel_names: ["right_front_wheel_joint", "right_rear_wheel_joint"]
+
+    # Wheel separation and radius (adjust based on your rover's dimensions)
+    wheel_separation: 0.51  # Distance between left and right wheels (meters)
+    wheel_radius: 0.1  # Wheel radius (meters) - adjust to match your wheels
+    
+    # Wheel separation multiplier for fine-tuning
+    wheel_separation_multiplier: 1.0
+    
+    # Left and right wheel radius multipliers for calibration
+    left_wheel_radius_multiplier: 1.0
+    right_wheel_radius_multiplier: 1.0
+
+    # Publishing and odom settings
+    publish_rate: 50.0  # Hz
+    odom_frame_id: odom
+    base_frame_id: base_link
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+    # Enable odometry
+    open_loop: false
+    enable_odom_tf: true
+
+    # Use unstamped velocity commands (Twist instead of TwistStamped)
+    use_stamped_vel: false
+
+    # Command timeout for safety
+    cmd_vel_timeout: 0.5  # Stop if no commands received for 500ms
+    
+    # Velocity and acceleration limits
+    linear.x.has_velocity_limits: true
+    linear.x.has_acceleration_limits: true
+    linear.x.max_velocity: 2.0  # m/s
+    linear.x.min_velocity: -2.0  # m/s
+    linear.x.max_acceleration: 1.5  # m/s^2
+    linear.x.min_acceleration: -1.5  # m/s^2
+
+    angular.z.has_velocity_limits: true
+    angular.z.has_acceleration_limits: true
+    angular.z.max_velocity: 3.0  # rad/s
+    angular.z.min_velocity: -3.0  # rad/s
+    angular.z.max_acceleration: 2.0  # rad/s^2
+    angular.z.min_acceleration: -2.0  # rad/s^2
