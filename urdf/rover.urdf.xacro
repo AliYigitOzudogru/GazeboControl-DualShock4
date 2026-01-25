@@ -64,8 +64,8 @@
     <parent link="base_link" />
     <child link="Sag_suspansiyon_merkezi" />
     <axis xyz="0 1 0" />
-    <limit lower="-0.5236" upper="0.5236" effort="100" velocity="1.0" />
-    <dynamics damping="10.0" friction="1.0"/>
+    <limit lower="-0.3" upper="0.3" effort="100" velocity="1.0" />
+    <dynamics damping="5.0" friction="1.0"/>
   </joint>
 
   <link name="right_front_wheel">
@@ -162,8 +162,8 @@
     <parent link="base_link" />
     <child link="Sol_Suspensiyon_merkezi" />
     <axis xyz="0 1 0" />
-    <limit lower="-0.5236" upper="0.5236" effort="100" velocity="1.0" />
-    <dynamics damping="10.0" friction="1.0"/>
+    <limit lower="-0.3" upper="0.3" effort="100" velocity="1.0" />
+    <dynamics damping="5.0" friction="1.0"/>
   </joint>
 
   <link name="left_front_wheel">
@@ -269,6 +269,17 @@
     <kd>100.0</kd>
     <minDepth>0.001</minDepth>
     <maxVel>1.0</maxVel>
+  </gazebo>
+
+  <!-- Süspansiyon Spring Parametreleri -->
+  <gazebo reference="Sag_Suspansiyon_merkezi_joint">
+    <springStiffness>500</springStiffness>
+    <springReference>0</springReference>
+  </gazebo>
+
+  <gazebo reference="Sol_Suspensiyon_merkezi_joint">
+    <springStiffness>500</springStiffness>
+    <springReference>0</springReference>
   </gazebo>
 
   <!-- ===================== ROS2 CONTROL ===================== -->
