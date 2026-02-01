@@ -21,6 +21,8 @@ from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 import math
 
+# Define the PS4 Drive Node
+
 
 class PS4DriveNode(Node):
     """
@@ -43,6 +45,8 @@ class PS4DriveNode(Node):
         self.declare_parameter('trigger_deadzone', 0.05)  # Trigger deadzone
         self.declare_parameter('exponential_steering', True)  # Apply exponential curve to steering
         self.declare_parameter('steering_sensitivity', 1.0)  # Steering multiplier
+        self.declare_parameter('invert_steering', False)  # Invert steering direction
+        self.declare_parameter('steering_power', 2.0)  # Exponential curve power
         
         # Get parameters
         self.max_linear_vel = self.get_parameter('max_linear_velocity').value
@@ -56,6 +60,8 @@ class PS4DriveNode(Node):
         self.trigger_deadzone = self.get_parameter('trigger_deadzone').value
         self.exponential_steering = self.get_parameter('exponential_steering').value
         self.steering_sensitivity = self.get_parameter('steering_sensitivity').value
+        self.invert_steering = self.get_parameter('invert_steering').value
+        self.steering_power = self.get_parameter('steering_power').value
         
         # Create subscriber to joy topic
         self.joy_sub = self.create_subscription(
@@ -159,13 +165,15 @@ class PS4DriveNode(Node):
         # Get steering input from left analog stick (horizontal)
         if len(msg.axes) > self.steering_axis:
             steering_raw = msg.axes[self.steering_axis]
+            if self.invert_steering:
+                steering_raw *= -1.0
             
             # Apply deadzone
             steering = self.apply_deadzone(steering_raw, self.deadzone)
             
             # Apply exponential curve if enabled (for finer control)
             if self.exponential_steering and steering != 0.0:
-                steering = self.apply_exponential_curve(steering, power=2.0)
+                steering = self.apply_exponential_curve(steering, power=self.steering_power)
             
             # Apply sensitivity multiplier
             steering *= self.steering_sensitivity

@@ -29,7 +29,7 @@ install(DIRECTORY
   launch
   urdf
   meshes
-  textures
+
   config
   worlds
   DESTINATION share/${PROJECT_NAME}/

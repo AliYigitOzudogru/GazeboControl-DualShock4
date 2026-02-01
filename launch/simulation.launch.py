@@ -191,7 +191,7 @@ def generate_launch_description():
         executable='joy_node',
         name='joy_node',
         parameters=[{
-            'device_id': 1,  # Use js1 for PS4 controller
+            'device_id': 0,  # Use js1 for PS4 controller (device_id 0 = /dev/input/js1)
             'deadzone': 0.05,
             'autorepeat_rate': 20.0,
         }],
