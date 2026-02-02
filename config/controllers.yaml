@@ -2,7 +2,7 @@ controller_manager:
   ros__parameters:
     update_rate: 50  # Hz
 
-    # List of controllers to load on startup
+    # Başlangıçta yüklenecek kontrolcüler
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
@@ -12,7 +12,7 @@ controller_manager:
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-# Joint State Broadcaster Configuration
+# Joint State Broadcaster Yapılandırması
 joint_state_broadcaster:
   ros__parameters:
     joints:
@@ -29,7 +29,7 @@ joint_state_broadcaster:
       - position
       - velocity
 
-# Arm Controller Configuration (Joint Trajectory Controller)
+# Kol Kontrolcüsü Yapılandırması (Joint Trajectory Controller)
 arm_controller:
   ros__parameters:
     joints:
@@ -56,52 +56,50 @@ arm_controller:
       stopped_velocity_tolerance: 0.01
       goal_time: 0.0
 
-# Differential Drive Controller Configuration
+# Diferansiyel Sürüş Kontrolcüsü Yapılandırması
 diff_drive_controller:
   ros__parameters:
-    # Wheel joints
+    # Tekerlek jointleri
     left_wheel_names: ["left_front_wheel_joint", "left_rear_wheel_joint"]
     right_wheel_names: ["right_front_wheel_joint", "right_rear_wheel_joint"]
 
-    # Wheel separation and radius (adjust based on your rover's dimensions)
-    wheel_separation: 0.51  # Distance between left and right wheels (meters)
-    wheel_radius: 0.1  # Wheel radius (meters) - adjust to match your wheels
+    # Tekerlek aralığı ve yarıçapı (rover'ınızın boyutlarına göre ayarlayın)
+    wheel_separation: 0.51  # Sol ve sağ tekerlekler arası mesafe (metre)
+    wheel_radius: 0.1  # Tekerlek yarıçapı (metre) - tekerleklerinize uyacak şekilde ayarlayın
     
-    # Wheel separation multiplier for fine-tuning
+    # İnce ayar için tekerlek aralığı çarpanı
     wheel_separation_multiplier: 1.0
     
-    # Left and right wheel radius multipliers for calibration
+    # Kalibrasyon için sol ve sağ tekerlek yarıçap çarpanları
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
 
-    # Publishing and odom settings
+    # Yayınlama ve odometri ayarları
     publish_rate: 50.0  # Hz
     odom_frame_id: odom
     base_frame_id: base_link
     pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
-    # Enable odometry
+    # Odometriyi etkinleştir
     open_loop: false
     enable_odom_tf: true
 
-    # Use unstamped velocity commands (Twist instead of TwistStamped)
+    # Zamansız hız komutlarını kullan (TwistStamped yerine Twist)
     use_stamped_vel: false
 
-    # Command timeout for safety
-    cmd_vel_timeout: 0.5  # Stop if no commands received for 500ms
+    # Güvenlik için komut zaman aşımı
+    cmd_vel_timeout: 0.5  # 500ms boyunca komut alınmazsa durdur
     
-    # Velocity and acceleration limits
+    # Hız ve ivme limitleri
     linear.x.has_velocity_limits: true
     linear.x.has_acceleration_limits: true
-    linear.x.max_velocity: 2.0  # m/s
-    linear.x.min_velocity: -2.0  # m/s
-    linear.x.max_acceleration: 1.5  # m/s^2
-    linear.x.min_acceleration: -1.5  # m/s^2
+    linear.x.max_velocity: 2.5  # m/s - hızlı tepki için artırıldı
+    linear.x.min_velocity: -2.5  # m/s
+    linear.x.max_acceleration: 2.0  # m/s^2 - daha hızlı hızlanma
+    linear.x.min_acceleration: -2.5  # m/s^2 - daha güçlü frenleme
 
     angular.z.has_velocity_limits: true
-    angular.z.has_acceleration_limits: true
-    angular.z.max_velocity: 3.0  # rad/s
-    angular.z.min_velocity: -3.0  # rad/s
-    angular.z.max_acceleration: 2.0  # rad/s^2
-    angular.z.min_acceleration: -2.0  # rad/s^2
+    angular.z.has_acceleration_limits: false
+    angular.z.max_velocity: 10.0  # rad/s - çok daha hızlı dönüş
+    angular.z.min_velocity: -10.0  # rad/s

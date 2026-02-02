@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Master Launch File for Rover Simulation with PS4 Controller
+PS4 Kumanda ile Rover Simülasyonu Ana Launch Dosyası
 
-This launch file brings up the complete simulation stack:
-1. Gazebo Sim with custom world
-2. Robot state publisher
-3. Spawn rover URDF
-4. ros2_control controllers (joint_state_broadcaster, diff_drive_controller)
-5. Joy node for PS4 controller
-6. Custom PS4 drive node
-7. ROS-Gazebo bridge for essential topics
+Bu launch dosyası tüm simülasyon bileşenlerini başlatır:
+1. Gazebo Sim ile özel dünya
+2. Robot durum yayıncısı
+3. Rover URDF'ini sahneye ekle
+4. ros2_control kontrolcüleri (joint_state_broadcaster, diff_drive_controller)
+5. PS4 kumanda için joy düğümü
+6. Özel PS4 sürüş düğümü
+7. Gerekli topicler için ROS-Gazebo köprüsü
 
-Author: ROS 2 Gazebo Simulation Team
-License: Apache 2.0
+Yazar: Bilgisayar Mühendisliği Öğrencisi
+Lisans: Apache 2.0
 """
 
 import os
@@ -29,56 +29,56 @@ import xacro
 
 def generate_launch_description():
     """
-    Generate the launch description for the complete rover simulation.
+    Rover simülasyonu için launch açıklamasını oluştur.
     """
     
-    # Get package directories
+    # Paket dizinlerini al
     pkg_name = 'rover_sim'
     pkg_share = get_package_share_directory(pkg_name)
     
-    # Parent directory of pkg_share - needed for Gazebo to find model://rover_sim/meshes/
+    # pkg_share'ın üst dizini - Gazebo'nun model://rover_sim/meshes/ bulması için gerekli
     pkg_share_parent = os.path.dirname(pkg_share)
     
-    # Set Gazebo model path - THIS IS CRITICAL FOR MESH LOADING
-    # Gazebo looks for model://rover_sim/meshes/... so we need the parent directory
+    # Gazebo model yolunu ayarla - MESH YÜKLEME İÇİN ÖNEMLİ
+    # Gazebo model://rover_sim/meshes/... aradığı için üst dizine ihtiyacımız var
     gazebo_model_path = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
         value=pkg_share_parent + ':' + pkg_share
     )
     
-    # Also set IGN_GAZEBO_RESOURCE_PATH for compatibility
+    # Uyumluluk için IGN_GAZEBO_RESOURCE_PATH değişkenini de ayarla
     ign_gazebo_resource_path = SetEnvironmentVariable(
         name='IGN_GAZEBO_RESOURCE_PATH',
         value=pkg_share_parent + ':' + pkg_share
     )
     
-    # Paths to important files
+    # Önemli dosyalara giden yollar
     urdf_file = os.path.join(pkg_share, 'urdf', 'rover.urdf.xacro')
     world_file = os.path.join(pkg_share, 'worlds', 'rover_world.sdf')
     controllers_file = os.path.join(pkg_share, 'config', 'controllers.yaml')
     
-    # Launch configuration variables
+    # Launch yapılandırma değişkenleri
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     world_arg = LaunchConfiguration('world', default=world_file)
     
-    # Declare launch arguments
+    # Launch argümanlarını tanımla
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
         default_value='true',
-        description='Use simulation (Gazebo) clock if true'
+        description='True ise simülasyon (Gazebo) saatini kullan'
     )
     
     declare_world_cmd = DeclareLaunchArgument(
         'world',
         default_value=world_file,
-        description='Full path to world file to load'
+        description='Yüklenecek dünya dosyasının tam yolu'
     )
     
-    # Process the URDF/xacro file
+    # URDF/xacro dosyasını işle
     robot_description_config = xacro.process_file(urdf_file)
     robot_description = {'robot_description': robot_description_config.toxml()}
     
-    # Robot State Publisher Node
+    # Robot Durum Yayıncısı Düğümü
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -89,7 +89,7 @@ def generate_launch_description():
         ]
     )
     
-    # Gazebo Sim Launch
+    # Gazebo Sim Başlat
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
@@ -104,7 +104,7 @@ def generate_launch_description():
         }.items()
     )
     
-    # Spawn the rover in Gazebo
+    # Rover'ı Gazebo'da oluştur
     spawn_robot = Node(
         package='ros_gz_sim',
         executable='create',
@@ -119,7 +119,7 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Joint State Broadcaster Spawner
+    # Joint State Broadcaster Başlatıcı
     joint_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
@@ -127,7 +127,7 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Diff Drive Controller Spawner
+    # Diff Drive Controller Başlatıcı
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
@@ -135,7 +135,7 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Arm Controller Spawner
+    # Arm Controller Başlatıcı
     arm_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
@@ -143,7 +143,7 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Delay controller spawners until robot is spawned
+    # Kontrolcü başlatıcılarını robot oluşturulduktan sonra çalıştır
     delay_joint_state_broadcaster = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=spawn_robot,
@@ -165,8 +165,8 @@ def generate_launch_description():
         )
     )
     
-    # ROS-Gazebo Bridge for essential topics
-    # Bridge clock
+    # Gerekli topicler için ROS-Gazebo Köprüsü
+    # Clock köprüsü
     bridge_clock = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -174,7 +174,7 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Bridge odometry (optional, if needed)
+    # Odometry köprüsü (isteğe bağlı, gerekirse)
     bridge_odom = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -185,20 +185,20 @@ def generate_launch_description():
         ]
     )
     
-    # Joy Node (PS4 Controller Driver)
+    # Joy Düğümü (PS4 Kumanda Sürücüsü)
     joy_node = Node(
         package='joy',
         executable='joy_node',
         name='joy_node',
         parameters=[{
-            'device_id': 0,  # Use js1 for PS4 controller (device_id 0 = /dev/input/js1)
+            'device_id': 1,  # PS4 Kablosuz Kumanda /dev/input/js1 üzerinde (device_id 1)
             'deadzone': 0.05,
             'autorepeat_rate': 20.0,
         }],
         output='screen'
     )
     
-    # Custom PS4 Drive Node
+    # Özel PS4 Sürüş Düğümü
     ps4_drive_node = Node(
         package=pkg_name,
         executable='ps4_drive_node.py',
@@ -207,31 +207,37 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': use_sim_time,
             'max_linear_velocity': 2.0,
-            'max_angular_velocity': 3.0,
-            'deadman_button': 0,  # X button
+            'max_angular_velocity': 10.0,
+            'deadman_button': 0,  # X butonu
             'enable_deadman': True,
-            'steering_axis': 0,  # Left stick horizontal
-            'accelerator_axis': 5,  # R2 trigger
-            'brake_axis': 4,  # L2 trigger
-            'deadzone': 0.1,
+            'steering_axis': 0,  # Sol çubuk yatay
+            'accelerator_axis': 5,  # R2 tetik
+            'brake_axis': 4,  # L2 tetik
+            'deadzone': 0.03,
             'trigger_deadzone': 0.05,
             'exponential_steering': True,
-            'steering_sensitivity': 1.0,
+            'steering_power': 1.3,
+            'steering_sensitivity': 3.0,
+            'invert_steering': False,
+            'steering_throttle_reduction': 0.3,
+            'min_linear_scale': 0.6,
+            'smoothing_enabled': True,
+            'smoothing_factor': 0.85,
         }]
     )
     
-    # Create the launch description
+    # Launch açıklamasını oluştur
     ld = LaunchDescription()
     
-    # Add environment variables FIRST
+    # Önce çevre değişkenlerini ekle
     ld.add_action(gazebo_model_path)
     ld.add_action(ign_gazebo_resource_path)
     
-    # Add launch arguments
+    # Launch argümanlarını ekle
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_world_cmd)
     
-    # Add nodes in order
+    # Düğümleri sırayla ekle
     ld.add_action(gazebo)
     ld.add_action(robot_state_publisher_node)
     ld.add_action(spawn_robot)
