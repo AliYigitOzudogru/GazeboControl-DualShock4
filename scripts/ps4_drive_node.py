@@ -48,10 +48,10 @@ class PS4DriveNode(Node):
         self.declare_parameter('steering_sensitivity', 1.2)  # Direksiyon hassasiyeti çarpanı
         self.declare_parameter('invert_steering', False)  # Direksiyon yönünü tersine çevir
         self.declare_parameter('steering_power', 1.5)  # Üstel eğri kuvveti
-        self.declare_parameter('steering_throttle_reduction', 0.5)  # Dönüşte gaz azaltma (0.0-1.0)
-        self.declare_parameter('min_linear_scale', 0.3)  # Dönüşte minimum hız ölçeği
+        self.declare_parameter('steering_throttle_reduction', 0.2)  # Dönüşte gaz azaltma - çok daha az
+        self.declare_parameter('min_linear_scale', 0.7)  # Dönüşte minimum hız ölçeği - daha yüksek
         self.declare_parameter('acceleration_curve_power', 1.3)  # Gaz pedalı için eğri uygula
-        self.declare_parameter('brake_power', 2.0)  # Fren gücü
+        self.declare_parameter('brake_power', 1.2)  # Fren gücü - hızlı yanıt için azaltıldı
         self.declare_parameter('smoothing_enabled', True)  # Komut yumuşatmayı etkinleştir
         self.declare_parameter('smoothing_factor', 0.7)  # Yumuşatma faktörü (0.0-1.0)
         

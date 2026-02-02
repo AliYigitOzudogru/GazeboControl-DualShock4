@@ -219,8 +219,8 @@ def generate_launch_description():
             'steering_power': 1.3,
             'steering_sensitivity': 3.0,
             'invert_steering': False,
-            'steering_throttle_reduction': 0.3,
-            'min_linear_scale': 0.6,
+            'steering_throttle_reduction': 0.2,
+            'min_linear_scale': 0.7,
             'smoothing_enabled': True,
             'smoothing_factor': 0.85,
         }]

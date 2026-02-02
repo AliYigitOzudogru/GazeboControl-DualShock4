@@ -68,7 +68,7 @@
     <child link="Sag_suspansiyon_merkezi" />
     <axis xyz="0 1 0" />
     <limit lower="-0.3" upper="0.3" effort="100" velocity="1.0" />
-    <dynamics damping="5.0" friction="1.0"/>
+    <dynamics damping="1.5" friction="0.5"/>
   </joint>
 
   <link name="right_front_wheel">
@@ -166,7 +166,7 @@
     <child link="Sol_Suspensiyon_merkezi" />
     <axis xyz="0 1 0" />
     <limit lower="-0.3" upper="0.3" effort="100" velocity="1.0" />
-    <dynamics damping="5.0" friction="1.0"/>
+    <dynamics damping="1.5" friction="0.5"/>
   </joint>
 
   <link name="left_front_wheel">
@@ -194,7 +194,7 @@
   </link>
 
   <joint name="left_front_wheel_joint" type="continuous">
-    <origin xyz="0.52892 0.1827 -0.30434" rpy="0 0 0" />
+    <origin xyz="0.51315 0.1837 -0.33036" rpy="0 0 0" />
     <parent link="Sol_Suspensiyon_merkezi" />
     <child link="left_front_wheel" />
     <axis xyz="0 1 0" />
@@ -226,7 +226,7 @@
   </link>
 
   <joint name="left_rear_wheel_joint" type="continuous">
-    <origin xyz="-0.54459 0.1827 -0.27547" rpy="0 0 0" />
+    <origin xyz="-0.55762 0.1827 -0.24797" rpy="0 0 0" />
     <parent link="Sol_Suspensiyon_merkezi" />
     <child link="left_rear_wheel" />
     <axis xyz="0 1 0" />
