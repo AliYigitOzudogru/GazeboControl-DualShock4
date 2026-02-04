@@ -185,13 +185,21 @@ def generate_launch_description():
         ]
     )
     
+    # Kamera görüntü köprüsü
+    bridge_camera = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/rover/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image'],
+        output='screen'
+    )
+    
     # Joy Düğümü (PS4 Kumanda Sürücüsü)
     joy_node = Node(
         package='joy',
         executable='joy_node',
         name='joy_node',
         parameters=[{
-            'device_id': 1,  # PS4 Kablosuz Kumanda /dev/input/js1 üzerinde (device_id 1)
+            'dev_fn': '/dev/input/js0',  # PS4 Kumanda tam yolu
             'deadzone': 0.05,
             'autorepeat_rate': 20.0,
         }],
@@ -246,6 +254,7 @@ def generate_launch_description():
     ld.add_action(delay_arm_controller)
     ld.add_action(bridge_clock)
     ld.add_action(bridge_odom)
+    ld.add_action(bridge_camera)
     ld.add_action(joy_node)
     ld.add_action(ps4_drive_node)
     
